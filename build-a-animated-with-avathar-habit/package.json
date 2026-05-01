@@ -1,0 +1,21 @@
+{
+  "name": "sreakmater",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Animated avatar habit tracker built with the MERN stack.",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "client": "npm run dev --workspace client -- --host 127.0.0.1",
+    "server": "npm run dev --workspace server",
+    "build": "npm run build --workspace client",
+    "start": "npm run start --workspace server",
+    "install:all": "npm install --workspaces"
+  },
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
