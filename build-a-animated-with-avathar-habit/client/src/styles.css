@@ -1,8 +1,14 @@
 :root {
   background: #f6f8fc;
-  color: #111827;
+  color: #19243a;
   font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -35,7 +41,7 @@ button {
 }
 
 .sidebar {
-  background: #111827;
+  background: #294834;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -372,7 +378,9 @@ button {
   border-top: 1px solid #edf0f5;
   display: grid;
   gap: 18px;
-  grid-template-columns: minmax(220px, 1.35fr) 100px minmax(210px, 1fr) 130px 34px;
+  grid-template-columns:
+    minmax(220px, 1.35fr) 100px minmax(210px, 1fr)
+    130px 34px;
   min-height: 84px;
   padding: 14px 24px;
 }
@@ -975,7 +983,11 @@ button {
 
 .auth-art {
   background:
-    radial-gradient(circle at 20% 16%, rgba(91, 70, 232, 0.45), transparent 28%),
+    radial-gradient(
+      circle at 20% 16%,
+      rgba(91, 70, 232, 0.45),
+      transparent 28%
+    ),
     linear-gradient(145deg, #17213a, #101827 62%, #0b1120);
   border-radius: 8px;
   display: flex;
@@ -987,7 +999,11 @@ button {
 }
 
 .auth-art::after {
-  background: linear-gradient(135deg, rgba(91, 70, 232, 0.9), rgba(47, 115, 218, 0.88));
+  background: linear-gradient(
+    135deg,
+    rgba(91, 70, 232, 0.9),
+    rgba(47, 115, 218, 0.88)
+  );
   bottom: -110px;
   content: "";
   height: 260px;

@@ -10,7 +10,26 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || "http://127.0.0.1:5173" }));
+const defaultOrigins = ["http://localhost:5173", "http://127.0.0.1:5173"];
+const configuredOrigins = (process.env.CLIENT_ORIGIN || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const allowedOrigins = [...new Set([...defaultOrigins, ...configuredOrigins])];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Not allowed by CORS: ${origin}`));
+    }
+  },
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(morgan("dev"));
 
@@ -181,7 +200,7 @@ async function ensureAdminUser() {
 }
 
 async function connectDatabase() {
-  const uri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/sreakmater";
+  const uri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/streakmater";
 
   try {
     await mongoose.connect(uri, { serverSelectionTimeoutMS: 1400 });

@@ -1,0 +1,22 @@
+services:
+  backend:
+    build: ./server
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    environment:
+      - CLIENT_ORIGIN=http://localhost:5173,http://127.0.0.1:5173
+      - MONGODB_URI=mongodb://mongo:27017/streakmater
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./client
+    ports:
+      - "5173:5173"
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"

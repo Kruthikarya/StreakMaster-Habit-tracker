@@ -22,11 +22,11 @@ import {
   Sparkles,
   Trash2,
   Trophy,
-  UserRound
+  UserRound,
 } from "lucide-react";
 import "./styles.css";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000/api";
+const API_URL = "http://localhost:5000/api";
 function toDateKey(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -39,7 +39,7 @@ const weekDays = ["M", "T", "W", "T", "F", "S", "S"];
 const dateFormatter = new Intl.DateTimeFormat("en-IN", {
   day: "2-digit",
   month: "short",
-  year: "numeric"
+  year: "numeric",
 });
 const dayFormatter = new Intl.DateTimeFormat("en-IN", { weekday: "long" });
 
@@ -50,7 +50,7 @@ const navItems = [
   { label: "Analytics", icon: BarChart3 },
   { label: "Achievements", icon: Trophy },
   { label: "Accounts", icon: UserRound, adminOnly: true },
-  { label: "Settings", icon: Settings }
+  { label: "Settings", icon: Settings },
 ];
 
 const iconMap = {
@@ -60,7 +60,7 @@ const iconMap = {
   Droplets,
   Dumbbell,
   Flame,
-  Sparkles
+  Sparkles,
 };
 
 const iconChoices = ["Dumbbell", "BookOpen", "Droplets", "Sparkles", "Code2"];
@@ -83,7 +83,11 @@ function displayDay(dateKey) {
 
 function AuthScreen({ onLogin }) {
   const [mode, setMode] = useState("login");
-  const [form, setForm] = useState({ name: "", username: "admin", password: "admin123" });
+  const [form, setForm] = useState({
+    name: "",
+    username: "admin",
+    password: "admin123",
+  });
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -96,10 +100,11 @@ function AuthScreen({ onLogin }) {
       const response = await fetch(`${API_URL}/auth/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Account request failed.");
+      if (!response.ok)
+        throw new Error(data.message || "Account request failed.");
       window.localStorage.setItem("sreakmater-user", JSON.stringify(data.user));
       onLogin(data.user);
     } catch (caughtError) {
@@ -115,17 +120,22 @@ function AuthScreen({ onLogin }) {
         <div className="brand">
           <Flame size={25} />
           <div>
-            <strong>SreakMater</strong>
+            <strong>StreakMater</strong>
             <small>Habit Tracker</small>
           </div>
         </div>
         <h1>Build streaks with your own account.</h1>
-        <p>Members can create accounts and track their own habits. Admins can monitor the account list.</p>
+        <p>
+          Members can create accounts and track their own habits. Admins can
+          monitor the account list.
+        </p>
       </section>
 
       <form className="auth-card" onSubmit={submitAuth}>
         <div>
-          <p className="eyebrow">{mode === "login" ? "Welcome back" : "Create account"}</p>
+          <p className="eyebrow">
+            {mode === "login" ? "Welcome back" : "Create account"}
+          </p>
           <h2>{mode === "login" ? "Sign in" : "Register"}</h2>
         </div>
 
@@ -134,7 +144,9 @@ function AuthScreen({ onLogin }) {
             Name
             <input
               value={form.name}
-              onChange={(event) => setForm({ ...form, name: event.target.value })}
+              onChange={(event) =>
+                setForm({ ...form, name: event.target.value })
+              }
               placeholder="Your name"
               required
             />
@@ -145,7 +157,9 @@ function AuthScreen({ onLogin }) {
           Username
           <input
             value={form.username}
-            onChange={(event) => setForm({ ...form, username: event.target.value })}
+            onChange={(event) =>
+              setForm({ ...form, username: event.target.value })
+            }
             placeholder="admin"
             required
           />
@@ -157,7 +171,9 @@ function AuthScreen({ onLogin }) {
             minLength="4"
             type="password"
             value={form.password}
-            onChange={(event) => setForm({ ...form, password: event.target.value })}
+            onChange={(event) =>
+              setForm({ ...form, password: event.target.value })
+            }
             placeholder="admin123"
             required
           />
@@ -166,7 +182,11 @@ function AuthScreen({ onLogin }) {
         {error && <p className="auth-error">{error}</p>}
 
         <button className="primary-button" type="submit" disabled={busy}>
-          {busy ? "Please wait" : mode === "login" ? "Sign in" : "Create account"}
+          {busy
+            ? "Please wait"
+            : mode === "login"
+              ? "Sign in"
+              : "Create account"}
         </button>
 
         <button
@@ -175,10 +195,16 @@ function AuthScreen({ onLogin }) {
           onClick={() => {
             setError("");
             setMode(mode === "login" ? "register" : "login");
-            setForm(mode === "login" ? { name: "", username: "", password: "" } : { name: "", username: "admin", password: "admin123" });
+            setForm(
+              mode === "login"
+                ? { name: "", username: "", password: "" }
+                : { name: "", username: "admin", password: "admin123" },
+            );
           }}
         >
-          {mode === "login" ? "Need an account? Register" : "Already have an account? Sign in"}
+          {mode === "login"
+            ? "Need an account? Register"
+            : "Already have an account? Sign in"}
         </button>
       </form>
     </main>
@@ -214,10 +240,33 @@ function StatCard({ icon: Icon, label, value, helper, tone }) {
 function StatsGrid({ stats }) {
   return (
     <section className="stats-grid" aria-label="Habit stats">
-      <StatCard icon={Flame} label="Current Streak" value={stats.totalStreak} helper="days" tone="purple" />
-      <StatCard icon={Check} label="Habits Completed" value={stats.completedToday} helper="today" tone="green" />
-      <StatCard icon={CalendarDays} label="Total Habits" value={stats.total} tone="gold" />
-      <StatCard icon={BarChart3} label="Success Rate" value={`${stats.successRate}%`} helper="this week" tone="blue" />
+      <StatCard
+        icon={Flame}
+        label="Current Streak"
+        value={stats.totalStreak}
+        helper="days"
+        tone="purple"
+      />
+      <StatCard
+        icon={Check}
+        label="Habits Completed"
+        value={stats.completedToday}
+        helper="today"
+        tone="green"
+      />
+      <StatCard
+        icon={CalendarDays}
+        label="Total Habits"
+        value={stats.total}
+        tone="gold"
+      />
+      <StatCard
+        icon={BarChart3}
+        label="Success Rate"
+        value={`${stats.successRate}%`}
+        helper="this week"
+        tone="blue"
+      />
     </section>
   );
 }
@@ -245,11 +294,17 @@ function HabitRow({ habit, selectedDate, onToggle, onDelete }) {
         <span>day streak</span>
       </div>
 
-      <div className="week-cell" aria-label={`${habit.title} weekly completion`}>
+      <div
+        className="week-cell"
+        aria-label={`${habit.title} weekly completion`}
+      >
         {weekDays.map((day, index) => (
           <span className="day-dot-wrap" key={`${habit._id}-${day}-${index}`}>
             <small>{day}</small>
-            <i className={index < activeDots ? "filled" : ""} style={{ "--habit-color": habit.color }} />
+            <i
+              className={index < activeDots ? "filled" : ""}
+              style={{ "--habit-color": habit.color }}
+            />
           </span>
         ))}
       </div>
@@ -281,31 +336,45 @@ function HabitsPanel({
   title = "Today's Habits",
   onDateChange,
   onToggle,
-  onDelete
+  onDelete,
 }) {
   return (
     <section className="habits-panel">
       <div className="panel-title-row">
         <h2>{title}</h2>
         <div className="date-control">
-          <button type="button" aria-label="Previous day" onClick={() => onDateChange(shiftDate(selectedDate, -1))}>
+          <button
+            type="button"
+            aria-label="Previous day"
+            onClick={() => onDateChange(shiftDate(selectedDate, -1))}
+          >
             <ChevronLeft size={16} />
           </button>
           <span>
             <CalendarDays size={15} />
             {displayDay(selectedDate)}, {displayDate(selectedDate)}
           </span>
-          <button type="button" className="today-jump" onClick={() => onDateChange(today)}>
+          <button
+            type="button"
+            className="today-jump"
+            onClick={() => onDateChange(today)}
+          >
             Today
           </button>
-          <button type="button" aria-label="Next day" onClick={() => onDateChange(shiftDate(selectedDate, 1))}>
+          <button
+            type="button"
+            aria-label="Next day"
+            onClick={() => onDateChange(shiftDate(selectedDate, 1))}
+          >
             <ChevronRight size={16} />
           </button>
         </div>
       </div>
 
       {status === "loading" && <p className="state-text">Loading habits...</p>}
-      {status === "error" && <p className="state-text">Start the API server to load habits.</p>}
+      {status === "error" && (
+        <p className="state-text">Start the API server to load habits.</p>
+      )}
       {status === "ready" && (
         <div className="habit-table">
           {habits.map((habit) => (
@@ -348,7 +417,15 @@ function ProgressCards({ stats }) {
   );
 }
 
-function DashboardView({ habits, stats, status, selectedDate, onDateChange, onToggle, onDelete }) {
+function DashboardView({
+  habits,
+  stats,
+  status,
+  selectedDate,
+  onDateChange,
+  onToggle,
+  onDelete,
+}) {
   return (
     <>
       <StatsGrid stats={stats} />
@@ -365,7 +442,15 @@ function DashboardView({ habits, stats, status, selectedDate, onDateChange, onTo
   );
 }
 
-function HabitsView({ habits, status, stats, selectedDate, onDateChange, onToggle, onDelete }) {
+function HabitsView({
+  habits,
+  status,
+  stats,
+  selectedDate,
+  onDateChange,
+  onToggle,
+  onDelete,
+}) {
   return (
     <>
       <div className="view-grid">
@@ -374,7 +459,10 @@ function HabitsView({ habits, status, stats, selectedDate, onDateChange, onToggl
             <Dumbbell size={20} />
             <h2>Habit Library</h2>
           </div>
-          <p>{stats.total} habits are active. Complete one today to grow your streak.</p>
+          <p>
+            {stats.total} habits are active. Complete one today to grow your
+            streak.
+          </p>
         </article>
         <article className="view-card">
           <div className="mini-heading">
@@ -400,7 +488,11 @@ function HabitsView({ habits, status, stats, selectedDate, onDateChange, onToggl
 }
 
 function CalendarView({ habits, events, onAddEvent }) {
-  const [eventForm, setEventForm] = useState({ title: "", day: 23, color: "#635bff" });
+  const [eventForm, setEventForm] = useState({
+    title: "",
+    day: 23,
+    color: "#635bff",
+  });
   const calendarDays = Array.from({ length: 35 }, (_, index) => index + 1);
   const completionMap = habits.reduce((map, habit, index) => {
     map[(index * 5 + habit.streak) % 35 || 1] = habit.color;
@@ -417,7 +509,7 @@ function CalendarView({ habits, events, onAddEvent }) {
     onAddEvent({
       ...eventForm,
       id: `event-${Date.now()}`,
-      day: Number(eventForm.day)
+      day: Number(eventForm.day),
     });
     setEventForm({ title: "", day: 23, color: "#635bff" });
   }
@@ -447,12 +539,24 @@ function CalendarView({ habits, events, onAddEvent }) {
         </div>
         <div className="calendar-grid">
           {calendarDays.map((day) => (
-            <button className={completionMap[day] || eventsByDay[day] ? "has-completion" : ""} key={day} type="button">
+            <button
+              className={
+                completionMap[day] || eventsByDay[day] ? "has-completion" : ""
+              }
+              key={day}
+              type="button"
+            >
               <span>{day}</span>
               <div className="calendar-markers">
-                {completionMap[day] && <i style={{ "--habit-color": completionMap[day] }} />}
+                {completionMap[day] && (
+                  <i style={{ "--habit-color": completionMap[day] }} />
+                )}
                 {eventsByDay[day]?.map((item) => (
-                  <i key={item.id} style={{ "--habit-color": item.color }} title={item.title} />
+                  <i
+                    key={item.id}
+                    style={{ "--habit-color": item.color }}
+                    title={item.title}
+                  />
                 ))}
               </div>
             </button>
@@ -469,7 +573,9 @@ function CalendarView({ habits, events, onAddEvent }) {
             Event name
             <input
               value={eventForm.title}
-              onChange={(event) => setEventForm({ ...eventForm, title: event.target.value })}
+              onChange={(event) =>
+                setEventForm({ ...eventForm, title: event.target.value })
+              }
               placeholder="Workout meetup"
               required
             />
@@ -481,7 +587,9 @@ function CalendarView({ habits, events, onAddEvent }) {
               max="35"
               type="number"
               value={eventForm.day}
-              onChange={(event) => setEventForm({ ...eventForm, day: event.target.value })}
+              onChange={(event) =>
+                setEventForm({ ...eventForm, day: event.target.value })
+              }
             />
           </label>
           <div className="swatches" aria-label="Choose event color">
@@ -532,7 +640,12 @@ function AnalyticsView({ habits, stats }) {
             <div className="chart-row" key={habit._id}>
               <span>{habit.title}</span>
               <div>
-                <i style={{ width: `${Math.min(100, (habit.streak / Math.max(1, stats.best)) * 100)}%`, background: habit.color }} />
+                <i
+                  style={{
+                    width: `${Math.min(100, (habit.streak / Math.max(1, stats.best)) * 100)}%`,
+                    background: habit.color,
+                  }}
+                />
               </div>
               <strong>{habit.streak}</strong>
             </div>
@@ -546,16 +659,39 @@ function AnalyticsView({ habits, stats }) {
 
 function AchievementsView({ stats }) {
   const achievements = [
-    { title: "First Win", detail: "Complete any habit today.", done: stats.completedToday > 0, icon: Medal },
-    { title: "Streak Builder", detail: "Reach 10 total streak days.", done: stats.totalStreak >= 10, icon: Flame },
-    { title: "Collector", detail: "Track at least 5 habits.", done: stats.total >= 5, icon: Trophy },
-    { title: "High Focus", detail: "Reach 80% success rate.", done: stats.successRate >= 80, icon: BarChart3 }
+    {
+      title: "First Win",
+      detail: "Complete any habit today.",
+      done: stats.completedToday > 0,
+      icon: Medal,
+    },
+    {
+      title: "Streak Builder",
+      detail: "Reach 10 total streak days.",
+      done: stats.totalStreak >= 10,
+      icon: Flame,
+    },
+    {
+      title: "Collector",
+      detail: "Track at least 5 habits.",
+      done: stats.total >= 5,
+      icon: Trophy,
+    },
+    {
+      title: "High Focus",
+      detail: "Reach 80% success rate.",
+      done: stats.successRate >= 80,
+      icon: BarChart3,
+    },
   ];
 
   return (
     <section className="achievement-grid">
       {achievements.map(({ title, detail, done, icon: Icon }) => (
-        <article className={`achievement-card ${done ? "unlocked" : ""}`} key={title}>
+        <article
+          className={`achievement-card ${done ? "unlocked" : ""}`}
+          key={title}
+        >
           <div className="achievement-icon">
             <Icon size={24} />
           </div>
@@ -582,7 +718,9 @@ function SettingsView({ settings, onSettingsChange }) {
         </span>
         <input
           checked={settings.reminders}
-          onChange={(event) => onSettingsChange({ ...settings, reminders: event.target.checked })}
+          onChange={(event) =>
+            onSettingsChange({ ...settings, reminders: event.target.checked })
+          }
           type="checkbox"
         />
       </label>
@@ -593,7 +731,9 @@ function SettingsView({ settings, onSettingsChange }) {
         </span>
         <input
           checked={settings.animations}
-          onChange={(event) => onSettingsChange({ ...settings, animations: event.target.checked })}
+          onChange={(event) =>
+            onSettingsChange({ ...settings, animations: event.target.checked })
+          }
           type="checkbox"
         />
       </label>
@@ -605,7 +745,9 @@ function SettingsView({ settings, onSettingsChange }) {
         <input
           className="name-input"
           value={settings.displayName}
-          onChange={(event) => onSettingsChange({ ...settings, displayName: event.target.value })}
+          onChange={(event) =>
+            onSettingsChange({ ...settings, displayName: event.target.value })
+          }
           type="text"
         />
       </label>
@@ -668,7 +810,11 @@ function BlastEffect({ show, name, kind }) {
       <div className="blast-message">
         <Flame size={34} />
         <h2>{kind === "all" ? "All habits completed!" : "Habit completed!"}</h2>
-        <p>{kind === "all" ? `${name}, today is fully cleared.` : `${name}, keep the streak alive.`}</p>
+        <p>
+          {kind === "all"
+            ? `${name}, today is fully cleared.`
+            : `${name}, keep the streak alive.`}
+        </p>
       </div>
     </div>
   );
@@ -702,29 +848,52 @@ function AddHabitModal({ open, onClose, onCreate, saving }) {
             <p className="eyebrow">New habit</p>
             <h2>Add Habit</h2>
           </div>
-          <button className="icon-button" type="button" onClick={onClose} aria-label="Close form">
+          <button
+            className="icon-button"
+            type="button"
+            onClick={onClose}
+            aria-label="Close form"
+          >
             <MoreVertical size={18} />
           </button>
         </div>
 
         <label>
           Habit name
-          <input value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Go to Gym" required />
+          <input
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            placeholder="Go to Gym"
+            required
+          />
         </label>
 
         <label>
           Subtitle
-          <input value={category} onChange={(event) => setCategory(event.target.value)} placeholder="Stay healthy" />
+          <input
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+            placeholder="Stay healthy"
+          />
         </label>
 
         <div className="modal-grid">
           <label>
             Goal days
-            <input min="1" max="365" type="number" value={target} onChange={(event) => setTarget(event.target.value)} />
+            <input
+              min="1"
+              max="365"
+              type="number"
+              value={target}
+              onChange={(event) => setTarget(event.target.value)}
+            />
           </label>
           <label>
             Icon
-            <select value={icon} onChange={(event) => setIcon(event.target.value)}>
+            <select
+              value={icon}
+              onChange={(event) => setIcon(event.target.value)}
+            >
               {iconChoices.map((item) => (
                 <option key={item}>{item}</option>
               ))}
@@ -762,7 +931,7 @@ function App() {
   const [habits, setHabits] = useState([]);
   const [users, setUsers] = useState([]);
   const [events, setEvents] = useState([
-    { id: "event-1", title: "Progress review", day: 23, color: "#635bff" }
+    { id: "event-1", title: "Progress review", day: 23, color: "#635bff" },
   ]);
   const [status, setStatus] = useState("loading");
   const [selectedDate, setSelectedDate] = useState(today);
@@ -776,22 +945,37 @@ function App() {
     animations: true,
     avatar: "🙂",
     displayName: "Kruthik",
-    reminders: true
+    reminders: true,
   });
   const blastTimer = useRef(null);
 
   const stats = useMemo(() => {
     const totalStreak = habits.reduce((sum, habit) => sum + habit.streak, 0);
-    const completedToday = habits.filter((habit) => habit.completedDates.includes(today)).length;
-    const best = habits.reduce((max, habit) => Math.max(max, habit.bestStreak), 0);
-    const successRate = habits.length ? Math.round((completedToday / habits.length) * 100) : 0;
-    return { totalStreak, completedToday, best, successRate, total: habits.length };
+    const completedToday = habits.filter((habit) =>
+      habit.completedDates.includes(today),
+    ).length;
+    const best = habits.reduce(
+      (max, habit) => Math.max(max, habit.bestStreak),
+      0,
+    );
+    const successRate = habits.length
+      ? Math.round((completedToday / habits.length) * 100)
+      : 0;
+    return {
+      totalStreak,
+      completedToday,
+      best,
+      successRate,
+      total: habits.length,
+    };
   }, [habits]);
 
   async function loadHabits() {
     if (!session) return;
     try {
-      const response = await fetch(`${API_URL}/habits`, { headers: apiHeaders() });
+      const response = await fetch(`${API_URL}/habits`, {
+        headers: apiHeaders(),
+      });
       const data = await response.json();
       setHabits(data);
       setStatus("ready");
@@ -809,12 +993,14 @@ function App() {
     return {
       ...extra,
       "x-user-id": session?._id || "admin",
-      "x-user-role": session?.role || "member"
+      "x-user-role": session?.role || "member",
     };
   }
 
   async function loadUsers() {
-    const response = await fetch(`${API_URL}/admin/users`, { headers: apiHeaders() });
+    const response = await fetch(`${API_URL}/admin/users`, {
+      headers: apiHeaders(),
+    });
     if (response.ok) {
       setUsers(await response.json());
     }
@@ -833,7 +1019,7 @@ function App() {
       const response = await fetch(`${API_URL}/habits`, {
         method: "POST",
         headers: apiHeaders({ "Content-Type": "application/json" }),
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
       const habit = await response.json();
       setHabits((items) => [...items, habit]);
@@ -848,17 +1034,20 @@ function App() {
     const response = await fetch(`${API_URL}/habits/${id}/toggle`, {
       method: "PATCH",
       headers: apiHeaders({ "Content-Type": "application/json" }),
-      body: JSON.stringify({ date })
+      body: JSON.stringify({ date }),
     });
     const habit = await response.json();
     setHabits((items) => {
       const updated = items.map((item) => (item._id === id ? habit : item));
       const allDone =
-        updated.length > 0 && updated.every((item) => item.completedDates.includes(date));
+        updated.length > 0 &&
+        updated.every((item) => item.completedDates.includes(date));
       const wasAllDone =
-        items.length > 0 && items.every((item) => item.completedDates.includes(date));
+        items.length > 0 &&
+        items.every((item) => item.completedDates.includes(date));
       const justCompleted = habit.completedDates.includes(date);
-      if (justCompleted) triggerBlast(allDone && !wasAllDone ? "all" : "single");
+      if (justCompleted)
+        triggerBlast(allDone && !wasAllDone ? "all" : "single");
       return updated;
     });
     setAvatarMood(habit.avatarMood);
@@ -866,7 +1055,10 @@ function App() {
   }
 
   async function deleteHabit(id) {
-    await fetch(`${API_URL}/habits/${id}`, { method: "DELETE", headers: apiHeaders() });
+    await fetch(`${API_URL}/habits/${id}`, {
+      method: "DELETE",
+      headers: apiHeaders(),
+    });
     setHabits((items) => items.filter((habit) => habit._id !== id));
   }
 
@@ -885,7 +1077,7 @@ function App() {
     Analytics: ["Analytics", "Track which habits are carrying the week."],
     Achievements: ["Achievements", "Unlock milestones as your streaks grow."],
     Accounts: ["Accounts", "Review members who created SreakMater accounts."],
-    Settings: ["Settings", "Tune the habit tracker to your style."]
+    Settings: ["Settings", "Tune the habit tracker to your style."],
   };
 
   const [heading, subheading] = pageCopy[activeNav];
@@ -898,17 +1090,26 @@ function App() {
       selectedDate,
       onDateChange: setSelectedDate,
       onToggle: toggleHabit,
-      onDelete: deleteHabit
+      onDelete: deleteHabit,
     };
     if (activeNav === "Habits") return <HabitsView {...shared} />;
     if (activeNav === "Calendar") {
-      return <CalendarView habits={habits} events={events} onAddEvent={(event) => setEvents((items) => [...items, event])} />;
+      return (
+        <CalendarView
+          habits={habits}
+          events={events}
+          onAddEvent={(event) => setEvents((items) => [...items, event])}
+        />
+      );
     }
-    if (activeNav === "Analytics") return <AnalyticsView habits={habits} stats={stats} />;
+    if (activeNav === "Analytics")
+      return <AnalyticsView habits={habits} stats={stats} />;
     if (activeNav === "Achievements") return <AchievementsView stats={stats} />;
     if (activeNav === "Accounts") return <AccountsView users={users} />;
     if (activeNav === "Settings") {
-      return <SettingsView settings={settings} onSettingsChange={setSettings} />;
+      return (
+        <SettingsView settings={settings} onSettingsChange={setSettings} />
+      );
     }
     return <DashboardView {...shared} />;
   }
@@ -916,12 +1117,14 @@ function App() {
   if (!session) return <AuthScreen onLogin={setSession} />;
 
   return (
-    <main className={`dashboard-shell ${settings.animations ? "" : "reduce-motion"}`}>
+    <main
+      className={`dashboard-shell ${settings.animations ? "" : "reduce-motion"}`}
+    >
       <aside className="sidebar">
         <div className="brand">
           <Flame size={23} />
           <div>
-            <strong>SreakMater</strong>
+            <strong>StreakMater</strong>
             <small>Habit Tracker</small>
           </div>
         </div>
@@ -930,16 +1133,16 @@ function App() {
           {navItems
             .filter((item) => !item.adminOnly || session.role === "admin")
             .map(({ label, icon: Icon }) => (
-            <button
-              className={activeNav === label ? "active" : ""}
-              key={label}
-              type="button"
-              onClick={() => setActiveNav(label)}
-            >
-              <Icon size={17} />
-              {label}
-            </button>
-          ))}
+              <button
+                className={activeNav === label ? "active" : ""}
+                key={label}
+                type="button"
+                onClick={() => setActiveNav(label)}
+              >
+                <Icon size={17} />
+                {label}
+              </button>
+            ))}
         </nav>
 
         <div className="motivation-card">
@@ -964,11 +1167,17 @@ function App() {
             <p className="eyebrow">{activeNav}</p>
             <h1>
               {heading}
-              {activeNav === "Dashboard" ? `, ${session.name || settings.displayName || "Kruthik"}!` : ""}
+              {activeNav === "Dashboard"
+                ? `, ${session.name || settings.displayName || "Kruthik"}!`
+                : ""}
             </h1>
             <p>{subheading}</p>
           </div>
-          <button className="primary-button" type="button" onClick={() => setIsModalOpen(true)}>
+          <button
+            className="primary-button"
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+          >
             <Plus size={18} />
             Add Habit
           </button>
@@ -980,8 +1189,17 @@ function App() {
         {renderActiveView()}
       </section>
 
-      <AddHabitModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onCreate={createHabit} saving={saving} />
-      <BlastEffect show={showBlast} name={session.name || "Champion"} kind={blastKind} />
+      <AddHabitModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreate={createHabit}
+        saving={saving}
+      />
+      <BlastEffect
+        show={showBlast}
+        name={session.name || "Champion"}
+        kind={blastKind}
+      />
     </main>
   );
 }
