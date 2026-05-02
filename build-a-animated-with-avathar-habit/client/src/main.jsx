@@ -126,8 +126,8 @@ function AuthScreen({ onLogin }) {
         </div>
         <h1>Build streaks with your own account.</h1>
         <p>
-          Members can create accounts and track their own habits. Admins can
-          monitor the account list.
+          Unlock your potential by visualizing your consistency. Join a
+          community of high-performers tracking their growth in real-time.
         </p>
       </section>
 
